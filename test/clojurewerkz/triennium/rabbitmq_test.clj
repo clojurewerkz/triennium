@@ -13,43 +13,43 @@
     (let [t  (tr/make-trie)
           t2 (-> t
                  (tr/insert "a"))]
-      (is (= t2 {:root {"a" {}}}))))
+      (is (= t2 {"a" {}}))))
   (testing "case 2"
     (let [t  (tr/make-trie)
           t2 (-> t
                  (tr/insert "a")
                  (tr/insert "b"))]
-      (is (= t2 {:root {"a" {} "b" {}}}))))
+      (is (= t2 {"a" {} "b" {}}))))
   (testing "case 3"
     (let [t  (tr/make-trie)
           t2 (-> t
                  (tr/insert "a")
                  (tr/insert "b.c"))]
-      (is (= t2 {:root {"a" {} "b" {"c" {}}}}))))
+      (is (= t2 {"a" {} "b" {"c" {}}}))))
   (testing "case 4"
     (let [t  (tr/make-trie)
           t2 (-> t
                  (tr/insert "a.b")
                  (tr/insert "b.c"))]
-      (is (= t2 {:root {"a" {"b" {}} "b" {"c" {}}}}))))
+      (is (= t2 {"a" {"b" {}} "b" {"c" {}}}))))
   (testing "case 5"
     (let [t  (tr/make-trie)
           t2 (-> t
                  (tr/insert "a.b")
                  (tr/insert "a.b.c"))]
-      (is (= t2 {:root {"a" {"b" {"c" {}}}}}))))
+      (is (= t2 {"a" {"b" {"c" {}}}}))))
   (testing "case 6"
     (let [t  (tr/make-trie)
           t2 (-> t
                  (tr/insert "a.b.c.d")
                  (tr/insert "a.b.c.d.*"))]
-      (is (= t2 {:root {"a" {"b" {"c" {"d" {"*" {}}}}}}}))))
+      (is (= t2 {"a" {"b" {"c" {"d" {"*" {}}}}}}))))
   (testing "case 7"
     (let [t  (tr/make-trie)
           t2 (-> t
                  (tr/insert "a.b.c.d.#")
                  (tr/insert "a.b.c.d.*"))]
-      (is (= t2 {:root {"a" {"b" {"c" {"d" {"*" {} "#" {}}}}}}}))))
+      (is (= t2 {"a" {"b" {"c" {"d" {"*" {} "#" {}}}}}}))))
   (testing "case 8"
     (let [t  (tr/make-trie)
           t2 (-> t
@@ -57,30 +57,30 @@
                  (tr/insert "a.b.c.d.*")
                  (tr/insert "#.info")
                  (tr/insert "weather.storm.*"))]
-      (is (= t2 {:root {"weather" {"storm" {"*" {}}},
-                        "#" {"info" {}},
-                        "a" {"b" {"c" {"d" {"*" {}}}}}}})))))
+      (is (= t2 {"weather" {"storm" {"*" {}}},
+                 "#" {"info" {}},
+                 "a" {"b" {"c" {"d" {"*" {}}}}}})))))
 
 (deftest test-delete
   (testing "case 1"
     (let [t (-> (tr/make-trie)
                 (tr/insert "a")
                 (tr/delete "a"))]
-      (is (= {:root {}} t))))
+      (is (= {} t))))
   (testing "case 2"
     (let [t (-> (tr/make-trie)
                 (tr/insert "a")
                 (tr/insert "b")
                 (tr/insert "c")
                 (tr/delete "a"))]
-      (is (= {:root {"b" {} "c" {}}} t))))
+      (is (= {"b" {} "c" {}} t))))
   (testing "case 3"
     (let [t (-> (tr/make-trie)
                 (tr/insert "a.b.c")
                 (tr/insert "a.b.d")
                 (tr/insert "a.c")
                 (tr/delete "a.b.c"))]
-      (is (= {:root {"a" {"c" {} "b" {"d" {}}}}} t))))
+      (is (= {"a" {"c" {} "b" {"d" {}}}} t))))
   (testing "case 4"
     (let [t (-> (tr/make-trie)
                 (tr/insert "a.b.c")
@@ -89,4 +89,4 @@
                 (tr/delete "a.b"))]
       ;; TODO: this SHOULD NOT delete children nodes.
       ;; We need to store more info in the nodes to avoid this.
-      (is (= {:root {"a" {"c" {}}}} t)))))
+      (is (= {"a" {"c" {}}} t)))))

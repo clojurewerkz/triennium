@@ -4,5 +4,5 @@
 
 (deftest test-make-trie
   (let [t (tr/make-trie)]
-    (is (= t {:root {}}))))
+    (is (= t {} tr/empty-trie))))
 

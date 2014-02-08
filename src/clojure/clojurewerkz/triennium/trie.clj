@@ -5,22 +5,19 @@
 ;; API
 ;;
 
+(def empty-trie {})
+
 (defn make-trie
   []
-  {:root {}})
-
-(defn root-of
-  [trie]
-  (:root trie))
+  empty-trie)
 
 (defn insert
   ([trie segments]
      (insert trie segments {}))
   ([trie segments val]
-     (let [prefix    (into [:root] segments)]
-       (assoc-in trie prefix val))))
+     (assoc-in trie segments val)))
 
 
 (defn delete
   [trie segments]
-  {:root (dissoc-in (root-of trie) segments)})
+  (dissoc-in trie segments))
