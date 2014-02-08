@@ -1,4 +1,5 @@
-(ns clojurewerkz.triennium.trie)
+(ns clojurewerkz.triennium.trie
+  (:require [clojure.core.incubator :refer [dissoc-in]]))
 
 ;;
 ;; API
@@ -18,3 +19,8 @@
   ([trie segments val]
      (let [prefix    (into [:root] segments)]
        (assoc-in trie prefix val))))
+
+
+(defn delete
+  [trie segments]
+  {:root (dissoc-in (root-of trie) segments)})

@@ -60,3 +60,17 @@
       (is (= t2 {:root {"weather" {"storm" {"*" {}}},
                         "#" {"info" {}},
                         "a" {"b" {"c" {"d" {"*" {}}}}}}})))))
+
+(deftest test-delete
+  (testing "case 1"
+    (let [t (-> (tr/make-trie)
+                (tr/insert "a")
+                (tr/delete "a"))]
+      (is (= {:root {}} t))))
+  (testing "case 2"
+    (let [t (-> (tr/make-trie)
+                (tr/insert "a")
+                (tr/insert "b")
+                (tr/insert "c")
+                (tr/delete "a"))]
+      (is (= {:root {"b" {} "c" {}}} t)))))

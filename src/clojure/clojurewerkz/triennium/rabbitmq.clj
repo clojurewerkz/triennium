@@ -29,6 +29,11 @@
      (let [xs (split-topic topic)]
        (tr/insert trie xs val))))
 
+(defn delete
+  [trie ^String topic]
+  (let [xs (split-topic topic)]
+    (tr/delete trie xs)))
+
 (defn trie-match?
   [trie ^String topic]
   )
