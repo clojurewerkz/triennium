@@ -1,6 +1,7 @@
 (defproject clojurewerkz/triennium "1.0.0-SNAPSHOT"
   :description "FIXME"
-  :dependencies [[org.clojure/clojure "1.5.1"]]
+  :dependencies [[org.clojure/clojure        "1.5.1"]
+                 [org.clojure/core.incubator "0.1.3"]]
   :profiles {:1.4 {:dependencies [[org.clojure/clojure "1.4.0"]]}
              :1.6 {:dependencies [[org.clojure/clojure "1.6.0-master-SNAPSHOT"]]}
              :master {:dependencies [[org.clojure/clojure "1.6.0-master-SNAPSHOT"]]}
