@@ -80,4 +80,13 @@
                 (tr/insert "a.b.d")
                 (tr/insert "a.c")
                 (tr/delete "a.b.c"))]
-      (is (= {:root {"a" {"c" {} "b" {"d" {}}}}} t)))))
+      (is (= {:root {"a" {"c" {} "b" {"d" {}}}}} t))))
+  (testing "case 4"
+    (let [t (-> (tr/make-trie)
+                (tr/insert "a.b.c")
+                (tr/insert "a.b.d")
+                (tr/insert "a.c")
+                (tr/delete "a.b"))]
+      ;; TODO: this SHOULD NOT delete children nodes.
+      ;; We need to store more info in the nodes to avoid this.
+      (is (= {:root {"a" {"c" {}}}} t)))))
