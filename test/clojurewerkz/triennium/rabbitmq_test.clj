@@ -73,4 +73,11 @@
                 (tr/insert "b")
                 (tr/insert "c")
                 (tr/delete "a"))]
-      (is (= {:root {"b" {} "c" {}}} t)))))
+      (is (= {:root {"b" {} "c" {}}} t))))
+  (testing "case 3"
+    (let [t (-> (tr/make-trie)
+                (tr/insert "a.b.c")
+                (tr/insert "a.b.d")
+                (tr/insert "a.c")
+                (tr/delete "a.b.c"))]
+      (is (= {:root {"a" {"c" {} "b" {"d" {}}}}} t)))))
