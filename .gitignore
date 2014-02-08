@@ -1,0 +1,17 @@
+pom.xml
+*jar
+/lib/
+/classes/
+.lein-*
+TAGS
+checkouts/*
+doc/*
+deploy.docs.sh
+target/*
+/bin
+/.classpath
+/.project
+/.settings
+/target
+.nrepl-*
+src/clojure/clojurewerkz/triennium/radix.clj
