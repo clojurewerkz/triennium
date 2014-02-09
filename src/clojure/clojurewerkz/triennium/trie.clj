@@ -45,5 +45,7 @@
       (if (and (empty? vals')
                (empty? (remove values-key? (keys node))))
         (dissoc-in trie segments)
-        (assoc-in trie (conj segments :values) vals')))
+        (if (seq vals')
+          (assoc-in trie (conj segments :values) vals')
+          (dissoc-in trie (conj segments :values)))))
     trie))
