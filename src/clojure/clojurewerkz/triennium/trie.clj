@@ -15,6 +15,10 @@
 (ns clojurewerkz.triennium.trie
   (:require [clojure.core.incubator :refer [dissoc-in]]))
 
+(defn ^:private values-key?
+  [k]
+  (= :values k))
+
 ;;
 ;; API
 ;;
@@ -26,12 +30,20 @@
   empty-trie)
 
 (defn insert
-  ([trie segments]
-     (insert trie segments {}))
-  ([trie segments val]
-     (assoc-in trie segments val)))
+  [trie segments val]
+  (if-let [node (get-in trie segments)]
+    (let [vals (conj (:values node) val)]
+      (assoc-in trie segments {:values vals}))
+    (assoc-in trie segments {:values #{val}})))
 
 
 (defn delete
-  [trie segments]
-  (dissoc-in trie segments))
+  [trie segments val]
+  (if-let [node (get-in trie segments)]
+    (let [vals  (:values node)
+          vals' (disj vals val)]
+      (if (and (empty? vals')
+               (empty? (remove values-key? (keys node))))
+        (dissoc-in trie segments)
+        (assoc-in trie (conj segments :values) vals')))
+    trie))
