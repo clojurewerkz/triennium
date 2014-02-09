@@ -37,16 +37,14 @@
   (tr/make-trie))
 
 (defn insert
-  ([trie ^String topic]
-     (insert trie topic {}))
-  ([trie ^String topic val]
-     (let [xs (split-topic topic)]
-       (tr/insert trie xs val))))
+  [trie ^String topic val]
+  (let [xs (split-topic topic)]
+    (tr/insert trie xs val)))
 
 (defn delete
-  [trie ^String topic]
+  [trie ^String topic val]
   (let [xs (split-topic topic)]
-    (tr/delete trie xs)))
+    (tr/delete trie xs val)))
 
 (defn trie-match?
   [trie ^String topic]
