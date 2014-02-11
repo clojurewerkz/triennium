@@ -4,9 +4,9 @@
 
 (deftest test-split-topic
   (are [topic words] (is (= (tr/split-topic topic) words))
-    "a/b/c" ["a" "b" "c"]
-    "a/b/+/d" ["a" "b" "+" "d"]
-    "a/b/c/#" ["a" "b" "c" "#"]))
+       "a/b/c" ["a" "b" "c"]
+       "a/b/+/d" ["a" "b" "+" "d"]
+       "a/b/c/#" ["a" "b" "c" "#"]))
 
 (deftest test-insert
   (testing "case 1"
@@ -89,7 +89,7 @@
                 (tr/delete "a/b" :d))]
       (is (= {"a" {"c" {:values #{:c}}
                    "b" {"d" {:values #{:b}}
-                   "c" {:values #{:a}}}}} t)))))
+                        "c" {:values #{:a}}}}} t)))))
 
 (deftest test-find
   (testing "case 1"
