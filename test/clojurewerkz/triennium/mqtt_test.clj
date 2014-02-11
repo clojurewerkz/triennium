@@ -90,3 +90,31 @@
       (is (= {"a" {"c" {:values #{:c}}
                    "b" {"d" {:values #{:b}}
                    "c" {:values #{:a}}}}} t)))))
+
+(deftest test-find
+  (testing "case 1"
+    (let [t (-> (tr/make-trie))]
+      (is (empty? (tr/find t "a")))
+      (is (empty? (tr/find t "/a")))
+      (is (empty? (tr/find t "a/b")))
+      (is (empty? (tr/find t "a/b/c")))))
+  (testing "case 2"
+    (let [t (-> (tr/make-trie)
+                (tr/insert "a" :a))]
+      (is (= (tr/find t "a")
+             #{:a}))))
+  (testing "case 3"
+    (let [t (-> (tr/make-trie)
+                (tr/insert "a/b" :a))]
+      (is (= (tr/find t "a/b")
+             #{:a}))
+      (is (empty? (tr/find t "a/c")))))
+  (testing "case 3"
+    (let [t (-> (tr/make-trie)
+                (tr/insert "a/b" :a)
+                (tr/insert "a/b/c" :b))]
+      (are [topic result]
+        (is (= result (tr/find t topic)))
+        "a/b" #{:a}
+        "a/c" #{}
+        "a/b/c" #{:b}))))

@@ -49,3 +49,9 @@
           (assoc-in trie (conj segments :values) vals')
           (dissoc-in trie (conj segments :values)))))
     trie))
+
+(defn find
+  [trie segments]
+  (if-let [n (get-in trie segments)]
+    (get n :values #{})
+    #{}))

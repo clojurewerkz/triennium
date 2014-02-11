@@ -13,6 +13,7 @@
 ;; the License.
 
 (ns clojurewerkz.triennium.mqtt
+  (:refer-clojure :exclude [find])
   (:require [clojure.string :as cs]
             [clojurewerkz.triennium.trie :as tr]))
 
@@ -43,4 +44,9 @@
   [trie ^String topic val]
   (let [xs (split-topic topic)]
     (tr/delete trie xs val)))
+
+(defn find
+  [trie ^String topic]
+  (let [xs (split-topic topic)]
+    (tr/find trie xs)))
 

@@ -46,6 +46,7 @@
   (let [xs (split-topic topic)]
     (tr/delete trie xs val)))
 
-(defn trie-match?
+(defn find
   [trie ^String topic]
-  )
+  (let [xs (split-topic topic)]
+    (tr/find trie xs)))
