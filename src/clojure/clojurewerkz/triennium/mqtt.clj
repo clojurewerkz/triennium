@@ -13,7 +13,8 @@
 ;; the License.
 
 (ns clojurewerkz.triennium.mqtt
-  (:require [clojure.string :as cs]))
+  (:require [clojure.string :as cs]
+            [clojurewerkz.triennium.trie :as tr]))
 
 ;;
 ;; Implementation
@@ -29,7 +30,17 @@
   [^String topic]
   (cs/split topic segment-separator))
 
-(defn matches?
-  ([^String topic segments]
-     (let [xs (split-topic topic)]
-       )))
+(defn make-trie
+  []
+  (tr/make-trie))
+
+(defn insert
+  [trie ^String topic val]
+  (let [xs (split-topic topic)]
+    (tr/insert trie xs val)))
+
+(defn delete
+  [trie ^String topic val]
+  (let [xs (split-topic topic)]
+    (tr/delete trie xs val)))
+
