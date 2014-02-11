@@ -13,6 +13,7 @@
 ;; the License.
 
 (ns clojurewerkz.triennium.rabbitmq
+  (:refer-clojure :exclude [find])
   (:require [clojure.string :as cs]
             [clojurewerkz.triennium.trie :as tr]))
 
@@ -50,3 +51,20 @@
   [trie ^String topic]
   (let [xs (split-topic topic)]
     (tr/find trie xs)))
+
+(defn find-node
+  [trie ^String topic]
+  (let [xs (split-topic topic)]
+    (tr/find-node trie xs)))
+
+(defn children-of
+  [trie ^String topic]
+  (let [xs (split-topic topic)]
+    (tr/children-of trie xs)))
+
+(defn leaf-node?
+  ([node]
+     (empty? (dissoc node :values)))
+  ([trie ^String topic]
+     (let [xs (split-topic topic)]
+       (tr/leaf-node? trie xs))))

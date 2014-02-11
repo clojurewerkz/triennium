@@ -13,6 +13,7 @@
 ;; the License.
 
 (ns clojurewerkz.triennium.trie
+  (:refer-clojure :exclude [find])
   (:require [clojure.core.incubator :refer [dissoc-in]]))
 
 (defn ^:private values-key?
@@ -56,9 +57,19 @@
     (get n :values #{})
     #{}))
 
+(defn find-node
+  [trie segments]
+  (get-in trie segments))
+
 (defn children-of
   [trie segments]
   (if-let [n (get-in trie segments)]
     (-> n
         (dissoc :values))
     empty-trie))
+
+(defn leaf-node?
+  ([node]
+     (empty? (dissoc node :values)))
+  ([trie segments]
+     (leaf-node? (find-node trie segments))))

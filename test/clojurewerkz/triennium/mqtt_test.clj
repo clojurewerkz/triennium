@@ -93,7 +93,7 @@
 
 (deftest test-find
   (testing "case 1"
-    (let [t (-> (tr/make-trie))]
+    (let [t (tr/make-trie)]
       (is (empty? (tr/find t "a")))
       (is (empty? (tr/find t "/a")))
       (is (empty? (tr/find t "a/b")))
