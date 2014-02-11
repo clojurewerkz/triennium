@@ -50,3 +50,7 @@
   (let [xs (split-topic topic)]
     (tr/find trie xs)))
 
+(defn children-of
+  [trie ^String topic]
+  (let [xs (split-topic topic)]
+    (tr/children-of trie xs)))

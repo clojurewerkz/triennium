@@ -55,3 +55,10 @@
   (if-let [n (get-in trie segments)]
     (get n :values #{})
     #{}))
+
+(defn children-of
+  [trie segments]
+  (if-let [n (get-in trie segments)]
+    (-> n
+        (dissoc :values))
+    empty-trie))
