@@ -1,7 +1,7 @@
 # Triennium
 
 Triennium is a small library that strives to provide [efficient
-topic routing](http://www.rabbitmq.com/blog/2010/09/14/very-fast-and-scalable-topic-routing-part-1/) implementations for RabbitMQ and MQTT topic schemes.
+topic routing](http://www.rabbitmq.com/blog/2010/09/14/very-fast-and-scalable-topic-routing-part-1/) implementations for MQTT topic schemes.
 
 
 ## Project Goals
@@ -13,7 +13,7 @@ topic routing](http://www.rabbitmq.com/blog/2010/09/14/very-fast-and-scalable-to
 
 ## Project Maturity
 
-Triennium is *very* young.
+Triennium is *very* young and incomplete.
 
 
 ## Artifacts
