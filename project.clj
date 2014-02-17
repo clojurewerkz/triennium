@@ -9,7 +9,8 @@ topic routing implementations for RabbitMQ and MQTT topic schemes"
              :dev {:resource-paths ["test/resources"]
                    :plugins [[codox "0.6.4"]]
                    :codox {:sources ["src/clojure"]
-                           :output-dir "doc/api"}}}
+                           :output-dir "doc/api"}
+                   :dependencies [[reiddraper/simple-check "0.5.6"]]}}
   :aliases {"all" ["with-profile" "dev:dev,1.4:dev,1.6:dev,master"]}
   :repositories {"sonatype" {:url "http://oss.sonatype.org/content/repositories/releases"
                              :snapshots false
