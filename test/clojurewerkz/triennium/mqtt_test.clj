@@ -4,7 +4,8 @@
             [simple-check.core :as sc]
             [simple-check.generators :as gen]
             [simple-check.properties :as prop]
-            [simple-check.clojure-test :as ct :refer (defspec)]))
+            [simple-check.clojure-test :as ct :refer (defspec)]
+            [clojure.string :as cs]))
 
 (deftest test-split-topic
   (are [topic words] (is (= (tr/split-topic topic) words))
@@ -155,9 +156,19 @@
                 (tr/insert "a/+/#" :a+#)
                 (tr/insert "a/b/1" :ab1))
           s "a/b/1"]
-      (is (= #{:a+1 :a+# :ab1} (tr/matching-vals t s))))))
+      (is (= #{:a+1 :a+# :ab1} (tr/matching-vals t s)))))
+  (testing "case 5"
+    (let [t (-> (tr/make-trie)
+                (tr/insert "a" :a)
+                (tr/insert "b" :b)
+                (tr/insert "c" :c)
+                (tr/insert "+" :+)
+                (tr/insert "#" :#))
+          s "c"]
+      (is (= #{:c :+ :#} (tr/matching-vals t s))))))
 
-(defspec single-segment-matching 10000
+
+(defspec single-segment-matching-case1 10000
   (let [v :metrics+
         t (-> (tr/make-trie)
               (tr/insert "metrics/+" v))]
@@ -165,7 +176,7 @@
                   (= #{v}
                      (tr/matching-vals t (format "metrics/%s" s))))))
 
-(defspec exact-segment-matching 10000
+(defspec exact-segment-matching-case1 10000
   (prop/for-all [i (gen/not-empty gen/string-alpha-numeric)
                  n gen/int]
                 (let [s (format "metrics/%s" i)
@@ -175,7 +186,19 @@
                   (= #{n}
                      (tr/matching-vals t s)))))
 
-(defspec many-segment-matching 10000
+(defspec exact-segment-matching-case2 500
+  (prop/for-all [xs (gen/not-empty (gen/vector (gen/such-that (fn [^String s]
+                                                                (> (.length s) 3))
+                                                              gen/string-alpha-numeric)))
+                 n  gen/int]
+                (let [s (cs/join "/" xs)
+                      t (-> (tr/make-trie)
+                            (tr/insert "a/b/c/d" 99)
+                            (tr/insert s n))]
+                  (= #{n}
+                     (tr/matching-vals t s)))))
+
+(defspec many-segment-matching-case1 10000
   (prop/for-all [i (gen/not-empty gen/string-alpha-numeric)
                  n gen/int]
                 (let [s (format "metrics/hardware/%s" i)
