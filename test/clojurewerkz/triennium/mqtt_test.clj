@@ -135,4 +135,20 @@
                 (tr/insert "a/#" :a#)
                 (tr/insert "a/b/1" :ab1))
           s "a/1"]
-      (is (= #{:a1 :a+ :a#} (tr/matching-vals t s))))))
+      (is (= #{:a1 :a+ :a#} (tr/matching-vals t s)))))
+  (testing "case 3"
+    (let [t (-> (tr/make-trie)
+                (tr/insert "a/1" :a1)
+                (tr/insert "a/+" :a+)
+                (tr/insert "a/#" :a#)
+                (tr/insert "a/b/1" :ab1))
+          s "a/2"]
+      (is (= #{:a+ :a#} (tr/matching-vals t s)))))
+  (testing "case 4"
+    (let [t (-> (tr/make-trie)
+                (tr/insert "a/+/1" :a+1)
+                (tr/insert "a/+/2" :a+2)
+                (tr/insert "a/+/#" :a+#)
+                (tr/insert "a/b/1" :ab1))
+          s "a/b/1"]
+      (is (= #{:a+1 :a+# :ab1} (tr/matching-vals t s))))))
