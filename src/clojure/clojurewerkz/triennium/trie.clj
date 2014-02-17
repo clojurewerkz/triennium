@@ -14,7 +14,8 @@
 
 (ns clojurewerkz.triennium.trie
   (:refer-clojure :exclude [find])
-  (:require [clojure.core.incubator :refer [dissoc-in]]))
+  (:require [clojure.core.incubator :refer [dissoc-in]]
+            [clojure.set :refer [union]]))
 
 (defn ^:private values-key?
   [k]
@@ -61,15 +62,47 @@
   [trie segments]
   (get-in trie segments))
 
-(defn children-of
-  [trie segments]
-  (if-let [n (get-in trie segments)]
-    (-> n
-        (dissoc :values))
-    empty-trie))
+(defn vals-of
+  [node]
+  (get node :values #{}))
 
-(defn leaf-node?
+(defn leaf?
   ([node]
-     (empty? (dissoc node :values)))
+     (let [ks (keys node)]
+       (= '(:values) ks)))
   ([trie segments]
-     (leaf-node? (find-node trie segments))))
+     (leaf? (find-node trie segments))))
+
+(def branch? (complement leaf?))
+
+
+(defn matching-vals
+  ([trie segments matches-one matches-none-or-many]
+     (matching-vals trie segments matches-one matches-none-or-many (dec (count segments))))
+  ([trie segments matches-one matches-none-or-many remaining-depth]
+     (let [node           trie
+           xs             segments
+           acc            #{}
+           cs             (first segments)
+           remaining      (rest segments)
+           exact-match    (get node cs)
+           any-match      (get node matches-one)
+           many-match     (get node matches-none-or-many)]
+       (if (zero? remaining-depth)
+         (set (concat (:values exact-match)
+                      (:values any-match)
+                      (:values many-match)))
+         (set (concat acc
+                      (:values many-match)
+                      (when exact-match
+                        (matching-vals exact-match
+                                       remaining
+                                       matches-one
+                                       matches-none-or-many
+                                       (dec remaining-depth)))
+                      (when any-match
+                        (matching-vals any-match
+                                       remaining
+                                       matches-one
+                                       matches-none-or-many
+                                       (dec remaining-depth)))))))))

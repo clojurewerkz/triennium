@@ -79,3 +79,101 @@
                 (tr/insert ["a" "c"] :c)
                 (tr/delete ["a" "b" "c"] :a))]
       (is (= {"a" {"c" {:values #{:c}}, "b" {"d" {:values #{:b}}}}} t)))))
+
+(deftest test-matching-vals
+  (testing "case 1"
+    (let [t (-> (tr/make-trie)
+                (tr/insert ["a" "1"] :a1)
+                (tr/insert ["a" "2"] :a2)
+                (tr/insert ["a" "3"] :a3)
+                (tr/insert ["a" "b" "1"] :ab1))
+          xs ["a" "2"]]
+      (is (= #{:a2} (tr/matching-vals t xs "+" "#")))))
+  (testing "case 2"
+    (let [t (-> (tr/make-trie)
+                (tr/insert ["a" "1"] :a1)
+                (tr/insert ["a" "+"] :a+)
+                (tr/insert ["a" "#"] :a#)
+                (tr/insert ["a" "b" "1"] :ab1))
+          xs ["a" "1"]]
+      (is (= #{:a1 :a+ :a#} (tr/matching-vals t xs "+" "#")))))
+  (testing "case 3"
+    (let [t (-> (tr/make-trie)
+                (tr/insert ["a" "1"] :a1)
+                (tr/insert ["a" "+"] :a+)
+                (tr/insert ["a" "#"] :a#)
+                (tr/insert ["a" "b" "1"] :ab1))
+          xs ["a" "2"]]
+      (is (= #{:a+ :a#} (tr/matching-vals t xs "+" "#")))))
+  (testing "case 4"
+    (let [t (-> (tr/make-trie)
+                (tr/insert ["a" "+" "1"] :a+1)
+                (tr/insert ["a" "+" "2"] :a+2)
+                (tr/insert ["a" "+" "#"] :a+#)
+                (tr/insert ["a" "b" "1"] :ab1))
+          xs ["a" "b" "1"]]
+      (is (= #{:a+1 :a+# :ab1} (tr/matching-vals t xs "+" "#")))))
+  (testing "case 5"
+    (let [t (-> (tr/make-trie)
+                (tr/insert ["a" "+" "1" "+" "2"] :a+1+2)
+                (tr/insert ["a" "+" "2"] :a+2)
+                (tr/insert ["a" "b" "#"] :ab#)
+                (tr/insert ["a" "b" "1"] :ab1))
+          xs ["a" "b" "1"]]
+      (is (= #{:ab# :ab1} (tr/matching-vals t xs "+" "#")))))
+  (testing "case 6"
+    (let [t (-> (tr/make-trie)
+                (tr/insert ["r" "a"] :ra)
+                (tr/insert ["r" "a" "+"] :ra+)
+                (tr/insert ["r" "+" "d"] :r+d)
+                (tr/insert ["r" "c" "#"] :rc#))
+          xs ["r" "a" "c"]]
+      (is (= #{:ra+} (tr/matching-vals t xs "+" "#")))))
+  (testing "case 7"
+    (let [t (-> (tr/make-trie)
+                (tr/insert ["r" "a"] :ra)
+                (tr/insert ["r" "a" "+"] :ra+)
+                (tr/insert ["r" "+" "d"] :r+d)
+                (tr/insert ["r" "b" "#"] :rb#))
+          xs ["r" "b" "d"]]
+      (is (= #{:r+d :rb#} (tr/matching-vals t xs "+" "#")))))
+  (testing "case 8"
+    (let [t (-> (tr/make-trie)
+                (tr/insert ["r" "a"] :ra)
+                (tr/insert ["r" "a" "+"] :ra+)
+                (tr/insert ["r" "+" "d"] :r+d)
+                (tr/insert ["r" "b" "#"] :rb#))
+          xs ["r" "x" "b"]]
+      (is (= #{} (tr/matching-vals t xs "+" "#")))))
+  (testing "case 9"
+    (let [t (-> (tr/make-trie)
+                (tr/insert ["r" "a"] :ra)
+                (tr/insert ["r" "a" "+"] :ra+)
+                (tr/insert ["r" "+" "d"] :r+d)
+                (tr/insert ["r" "b" "#"] :rb#))
+          xs ["r" "x" "b"]]
+      (is (= #{} (tr/matching-vals t xs "+" "#")))))
+  (testing "case 10"
+    (let [t (-> (tr/make-trie)
+                (tr/insert ["r" "a"] :ra)
+                (tr/insert ["r" "a" "+" "x" "z" "+"] :ra+xz+)
+                (tr/insert ["r" "a" "+" "+" "+" "#"] :ra+++#)
+                (tr/insert ["r" "+" "#"] :r+#))
+          xs ["r" "a" "a" "x" "z" "z"]]
+      (is (= #{:ra+xz+ :ra+++# :r+#} (tr/matching-vals t xs "+" "#")))))
+  (testing "case 11"
+    (let [t (-> (tr/make-trie)
+                (tr/insert ["r" "a"] :ra)
+                (tr/insert ["r" "a" "+" "x" "z" "+"] :ra+xz+)
+                (tr/insert ["r" "a" "+" "+" "+"] :ra+++)
+                (tr/insert ["r" "+" "#"] :r+#))
+          xs ["r" "a" "a" "x" "z"]]
+      (is (= #{:ra+++ :r+#} (tr/matching-vals t xs "+" "#")))))
+  (testing "case 12"
+    (let [t (-> (tr/make-trie)
+                (tr/insert ["r" "a"] :ra)
+                (tr/insert ["r" "a" "b" "c" "d" "e"] :rabcde)
+                (tr/insert ["r" "a" "+" "1" "+"] :ra+++)
+                (tr/insert ["r" "z" "#"] :rz#))
+          xs ["r" "a" "b" "c" "d" "e"]]
+      (is (= #{:rabcde} (tr/matching-vals t xs "+" "#"))))))
