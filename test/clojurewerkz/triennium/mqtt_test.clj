@@ -118,3 +118,21 @@
         "a/b" #{:a}
         "a/c" #{}
         "a/b/c" #{:b}))))
+
+(deftest test-matching-vals
+  (testing "case 1"
+    (let [t (-> (tr/make-trie)
+                (tr/insert "a/1" :a1)
+                (tr/insert "a/2" :a2)
+                (tr/insert "a/3" :a3)
+                (tr/insert "a/b/1" :ab1))
+          s "a/2"]
+      (is (= #{:a2} (tr/matching-vals t s)))))
+  (testing "case 2"
+    (let [t (-> (tr/make-trie)
+                (tr/insert "a/1" :a1)
+                (tr/insert "a/+" :a+)
+                (tr/insert "a/#" :a#)
+                (tr/insert "a/b/1" :ab1))
+          s "a/1"]
+      (is (= #{:a1 :a+ :a#} (tr/matching-vals t s))))))

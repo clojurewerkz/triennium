@@ -22,6 +22,8 @@
 ;;
 
 (def ^:const segment-separator #"\/")
+(def ^:const matches-one "+")
+(def ^:const matches-none-or-many "#")
 
 ;;
 ;; API
@@ -55,14 +57,19 @@
   (let [xs (split-topic topic)]
     (tr/find-node trie xs)))
 
-(defn children-of
+(defn vals-of
   [trie ^String topic]
   (let [xs (split-topic topic)]
-    (tr/children-of trie xs)))
+    (tr/vals-of trie xs)))
 
-(defn leaf-node?
+(defn leaf?
   ([node]
      (empty? (dissoc node :values)))
   ([trie ^String topic]
      (let [xs (split-topic topic)]
-       (tr/leaf-node? trie xs))))
+       (tr/leaf? trie xs))))
+
+(defn matching-vals
+  [trie ^String topic]
+  (let [xs (split-topic topic)]
+    (tr/matching-vals trie xs matches-one matches-none-or-many)))
