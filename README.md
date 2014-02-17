@@ -33,7 +33,7 @@ Maven, add the following repository definition to your `pom.xml`:
 
 With Leiningen:
 
-    [clojurewerkz/triennium "1.0.0-alpha1"]
+    [clojurewerkz/triennium "1.0.0-beta1"]
 
 
 With Maven:
@@ -41,7 +41,7 @@ With Maven:
     <dependency>
       <groupId>clojurewerkz</groupId>
       <artifactId>triennium</artifactId>
-      <version>1.0.0-alpha1</version>
+      <version>1.0.0-beta1</version>
     </dependency>
 
 
