@@ -1,4 +1,4 @@
-(defproject clojurewerkz/triennium "1.0.0-beta1"
+(defproject clojurewerkz/triennium "1.0.0-beta2-SNAPSHOT"
   :description "Small library that strives to provide efficient
 topic routing implementations for RabbitMQ and MQTT topic schemes"
   :dependencies [[org.clojure/clojure        "1.5.1"]
