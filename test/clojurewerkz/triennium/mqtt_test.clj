@@ -1,6 +1,10 @@
 (ns clojurewerkz.triennium.mqtt-test
   (:require [clojure.test :refer :all]
-            [clojurewerkz.triennium.mqtt :as tr]))
+            [clojurewerkz.triennium.mqtt :as tr]
+            [simple-check.core :as sc]
+            [simple-check.generators :as gen]
+            [simple-check.properties :as prop]
+            [simple-check.clojure-test :as ct :refer (defspec)]))
 
 (deftest test-split-topic
   (are [topic words] (is (= (tr/split-topic topic) words))
@@ -152,3 +156,51 @@
                 (tr/insert "a/b/1" :ab1))
           s "a/b/1"]
       (is (= #{:a+1 :a+# :ab1} (tr/matching-vals t s))))))
+
+(defspec single-segment-matching 10000
+  (let [v :metrics+
+        t (-> (tr/make-trie)
+              (tr/insert "metrics/+" v))]
+    (prop/for-all [s (gen/not-empty gen/string-alpha-numeric)]
+                  (= #{v}
+                     (tr/matching-vals t (format "metrics/%s" s))))))
+
+(defspec exact-segment-matching 10000
+  (prop/for-all [i (gen/not-empty gen/string-alpha-numeric)
+                 n gen/int]
+                (let [s (format "metrics/%s" i)
+                      t (-> (tr/make-trie)
+                            (tr/insert "metrics/gc/young-gen" 99)
+                            (tr/insert s n))]
+                  (= #{n}
+                     (tr/matching-vals t s)))))
+
+(defspec many-segment-matching 10000
+  (prop/for-all [i (gen/not-empty gen/string-alpha-numeric)
+                 n gen/int]
+                (let [s (format "metrics/hardware/%s" i)
+                      t (-> (tr/make-trie)
+                            (tr/insert "metrics/#" n))]
+                  (= #{n}
+                     (tr/matching-vals t s)))))
+
+(defspec no-matching-case1 10000
+  (prop/for-all [i (gen/not-empty gen/string-alpha-numeric)
+                 n gen/int]
+                (let [s (format "metrics/hardware/%s" i)
+                      t (-> (tr/make-trie)
+                            (tr/insert "metrics/os/file-handles/open" n))]
+                  (empty? (tr/matching-vals t s)))))
+
+(defspec mixed-segment-matching-case1 10000
+  (prop/for-all [i  (gen/not-empty gen/string-alpha-numeric)]
+                (let [v1 :v1
+                      v2 :v2
+                      v3 :v3
+                      s (format "root/a/%s" i)
+                      t  (-> (tr/make-trie)
+                             (tr/insert "root/a/+" v1)
+                             (tr/insert "root/a/#" v2)
+                             (tr/insert (format "root/c/%s" i) v3))]
+                  (= #{v1 v2}
+                     (tr/matching-vals t s)))))
