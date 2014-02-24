@@ -15,7 +15,8 @@
 (ns clojurewerkz.triennium.mqtt
   (:refer-clojure :exclude [find])
   (:require [clojure.string :as cs]
-            [clojurewerkz.triennium.trie :as tr]))
+            [clojurewerkz.triennium.trie :as tr])
+  (:import clojure.lang.IFn))
 
 ;;
 ;; Implementation
@@ -46,6 +47,11 @@
   [trie ^String topic val]
   (let [xs (split-topic topic)]
     (tr/delete trie xs val)))
+
+(defn delete-matching
+  [trie ^String topic ^IFn f]
+  (let [xs (split-topic topic)]
+    (tr/delete-matching trie xs f)))
 
 (defn find
   [trie ^String topic]

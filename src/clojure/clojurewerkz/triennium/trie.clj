@@ -15,7 +15,8 @@
 (ns clojurewerkz.triennium.trie
   (:refer-clojure :exclude [find])
   (:require [clojure.core.incubator :refer [dissoc-in]]
-            [clojure.set :refer [union]]))
+            [clojure.set :refer [union]])
+  (:import clojure.lang.IFn))
 
 (defn ^:private values-key?
   [k]
@@ -44,6 +45,19 @@
   (if-let [node (get-in trie segments)]
     (let [vals  (:values node)
           vals' (disj vals val)]
+      (if (and (empty? vals')
+               (empty? (remove values-key? (keys node))))
+        (dissoc-in trie segments)
+        (if (seq vals')
+          (assoc-in trie (conj segments :values) vals')
+          (dissoc-in trie (conj segments :values)))))
+    trie))
+
+(defn delete-matching
+  [trie segments ^IFn f]
+  (if-let [node (get-in trie segments)]
+    (let [vals  (:values node)
+          vals' (set (remove f vals))]
       (if (and (empty? vals')
                (empty? (remove values-key? (keys node))))
         (dissoc-in trie segments)
