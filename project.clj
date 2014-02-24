@@ -1,6 +1,6 @@
-(defproject clojurewerkz/triennium "1.0.0-beta2"
+(defproject clojurewerkz/triennium "1.0.0-beta3-SNAPSHOT"
   :description "Small library that strives to provide efficient
-topic routing implementations for RabbitMQ and MQTT topic schemes"
+                topic routing implementations for MQTT topic schemes"
   :dependencies [[org.clojure/clojure        "1.5.1"]
                  [org.clojure/core.incubator "0.1.3"]]
   :profiles {:1.4 {:dependencies [[org.clojure/clojure "1.4.0"]]}
