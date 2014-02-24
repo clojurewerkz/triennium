@@ -1,3 +1,24 @@
+## 1.0.0-beta2
+
+### delete-matching
+
+`clojurewerkz.triennium.mqtt/delete-matching` and its
+`clojurewerkz.triennium.trie` counterpart are new functions
+that delete values that match a predicate:
+
+``` clojure
+(require '[clojurewerkz.triennium.mqtt :as tr])
+
+(-> (tr/make-trie)
+    (tr/insert "a/topic" :a)
+    (tr/insert "a/topic" :b)
+    (tr/insert "a/topic" :c)
+    (tr/delete-matching "a/topic" (fn [val]
+                                    (#{:a :b} val))
+;= {"a" {"topic" {:values #{:c}}}}
+```
+
+
 ## 1.0.0-beta1
 
 Initial release. A mostly correct implementation that
