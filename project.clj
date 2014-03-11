@@ -4,7 +4,7 @@
   :dependencies [[org.clojure/clojure        "1.5.1"]
                  [org.clojure/core.incubator "0.1.3"]]
   :profiles {:1.4 {:dependencies [[org.clojure/clojure "1.4.0"]]}
-             :1.6 {:dependencies [[org.clojure/clojure "1.6.0-beta2"]]}
+             :1.6 {:dependencies [[org.clojure/clojure "1.6.0-rc1"]]}
              :master {:dependencies [[org.clojure/clojure "1.6.0-master-SNAPSHOT"]]}
              :dev {:resource-paths ["test/resources"]
                    :plugins [[codox "0.6.6"]]
