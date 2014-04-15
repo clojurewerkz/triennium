@@ -200,4 +200,10 @@
                 (tr/insert "+" :+)
                 (tr/insert "#" :#))
           s "c"]
-      (is (= #{:c :+ :#} (tr/matching-vals t s))))))
+      (is (= #{:c :+ :#} (tr/matching-vals t s)))))
+  (testing "case 6"
+    (let [t (-> (tr/make-trie)
+                (tr/insert "a/b" :ab)
+                (tr/insert "#" :#))
+          s "a/b"]
+      (is (= #{:ab :#} (tr/matching-vals t s))))))
