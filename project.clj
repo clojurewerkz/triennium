@@ -7,7 +7,7 @@
              :1.6 {:dependencies [[org.clojure/clojure "1.6.0"]]}
              :master {:dependencies [[org.clojure/clojure "1.7.0-master-SNAPSHOT"]]}
              :dev {:resource-paths ["test/resources"]
-                   :plugins [[codox "0.8.5"]]
+                   :plugins [[codox "0.8.8"]]
                    :codox {:sources ["src/clojure"]
                            :output-dir "doc/api"}
                    :dependencies [[reiddraper/simple-check "0.5.6"]]}}
