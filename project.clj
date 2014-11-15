@@ -5,13 +5,14 @@
                  [org.clojure/core.incubator "0.1.3"]]
   :profiles {:1.4 {:dependencies [[org.clojure/clojure "1.4.0"]]}
              :1.6 {:dependencies [[org.clojure/clojure "1.6.0"]]}
+             :1.7 {:dependencies [[org.clojure/clojure "1.7.0-alpha4"]]}
              :master {:dependencies [[org.clojure/clojure "1.7.0-master-SNAPSHOT"]]}
              :dev {:resource-paths ["test/resources"]
                    :plugins [[codox "0.8.10"]]
                    :codox {:sources ["src/clojure"]
                            :output-dir "doc/api"}
                    :dependencies [[reiddraper/simple-check "0.5.6"]]}}
-  :aliases {"all" ["with-profile" "dev:dev,1.4:dev,1.6:dev,master"]}
+  :aliases {"all" ["with-profile" "dev:dev,1.4:dev,1.6:dev,1.7:dev,master"]}
   :repositories {"sonatype" {:url "http://oss.sonatype.org/content/repositories/releases"
                              :snapshots false
                              :releases {:checksum :fail}}
