@@ -10,8 +10,14 @@
                    :plugins [[codox "0.10.7"]]
                    :codox {:sources ["src/clojure"]
                            :output-dir "doc/api"}
-                   :dependencies [[org.clojure/test.check "1.1.0"]]}}
-  :aliases {"all" ["with-profile" "dev:dev,1.8:dev,1.9:dev,master"]}
+                   :dependencies [[org.clojure/test.check "1.1.0"]
+                                  [criterium "0.4.6"]]}
+             :perf {:jvm-opts ^:replace ["-server"]
+                             "-Xmx4096m"
+                             "-Dclojure.compiler.direct-linking=true"
+                    :test-paths ["perf-test/clj"]}}
+  :aliases {"all" ["with-profile" "dev:dev,1.8:dev,1.9:dev,master"]
+            "perf" ["with-profile" "default,dev,perf"]}
   :repositories {"sonatype" {:url "http://oss.sonatype.org/content/repositories/releases"
                              :snapshots false
                              :releases {:checksum :fail}}
