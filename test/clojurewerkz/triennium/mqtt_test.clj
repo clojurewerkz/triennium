@@ -14,8 +14,7 @@
 
 (ns clojurewerkz.triennium.mqtt-test
   (:require [clojure.test :refer :all]
-            [clojurewerkz.triennium.mqtt :as tr]
-            [clojure.string :as cs]))
+            [clojurewerkz.triennium.mqtt :as tr]))
 
 (deftest test-split-topic
   (are [topic words] (is (= (tr/split-topic topic) words))
