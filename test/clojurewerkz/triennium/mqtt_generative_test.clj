@@ -2,7 +2,6 @@
   (:require [clojure.test :refer :all]
             [clojurewerkz.triennium.mqtt :as tr]
             [clojure.string :as cs]
-            [clojure.test.check :as sc]
             [clojure.test.check.generators :as gen]
             [clojure.test.check.properties :as prop]
             [clojure.test.check.clojure-test :as ct :refer (defspec)]))

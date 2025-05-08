@@ -33,7 +33,7 @@ Maven, add the following repository definition to your `pom.xml`:
 
 With Leiningen:
 
-    [clojurewerkz/triennium "1.0.0-beta1"]
+    [clojurewerkz/triennium "1.0.0-beta3"]
 
 
 With Maven:
@@ -41,14 +41,39 @@ With Maven:
     <dependency>
       <groupId>clojurewerkz</groupId>
       <artifactId>triennium</artifactId>
-      <version>1.0.0-beta1</version>
+      <version>1.0.0-beta3</version>
     </dependency>
 
 
 ## Documentation & Examples
 
-This section will be updated as project API matures.
+``` clojure
+(require '[clojurewerkz.triennium.mqtt :as tr])
 
+(-> (tr/make-trie)
+    (tr/insert "a/topic" :a)
+    (tr/insert "a/topic" :b)
+    (tr/insert "a/topic" :c)
+    (tr/delete-matching "a/topic" (fn [val]
+                                    (#{:a :b} val))
+;= {"a" {"topic" {:values #{:c}}}}
+```
+
+Find subscribers for a particular subscription:
+```clojure
+(require '[clojurewerkz.triennium.mqtt :as tr])
+
+(-> (tr/make-trie)
+    (tr/insert "a/#" :a)
+    (tr/matching-vals "a/1"))
+
+; #{:a}    
+```
+(def d (-> (tr/make-trie)
+    (tr/insert "a/#" :a)))
+
+
+(tr/matching-vals {"test" {"+" {:values #{:a}}}} "test/1")
 
 ## Community & Support
 
@@ -62,7 +87,7 @@ Twitter.
 
 ## Supported Clojure versions
 
-Triennium is built from the ground up for Clojure 1.5.1 and up.
+Triennium is built from the ground up for Clojure 1.8 and up.
 
 
 ## Continuous Integration Status

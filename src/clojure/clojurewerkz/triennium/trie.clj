@@ -14,8 +14,7 @@
 
 (ns clojurewerkz.triennium.trie
   (:refer-clojure :exclude [find])
-  (:require [clojure.core.incubator :refer [dissoc-in]]
-            [clojure.set :refer [union]])
+  (:require [clojure.core.incubator :refer [dissoc-in]])
   (:import clojure.lang.IFn))
 
 (defn ^:private values-key?
